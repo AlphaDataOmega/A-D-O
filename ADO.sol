@@ -39,15 +39,20 @@ pragma solidity ^0.8.4;
 
 contract Elements {
 
-    //This is a record of a TRN in the ADO Universe
+    struct adowho {
+        uint soleId;
+        address owner;
+    }
+
+    // This is a record of a TRN in the ADO Universe
     struct TRN { 
         uint TRNid;
-        address adowho;
+        address soleId;
         string action; 
         uint[] inTRNId;       
     }
 
-    //dropHash will point to json
+    // 
     struct light {
         uint256 TRNid;
         uint lightId; // light counter
@@ -56,7 +61,7 @@ contract Elements {
         uint leaveId // the ID of the recieving leave
     }
 
-    struct BRN_t {
+    struct BRN {
         uint TRNid;
         uint BRNId;
         address adowho; // This is the adowho who BRN-ed a leave
@@ -81,14 +86,15 @@ contract Elements {
         hash leaveHash; // This is json data file hash id
         string branchID; // This is the ID of the orgin branch
         address adowho; // This is the creator of the branch
-        uint[] lightIDs; // Array of light interactions
+        uint[] lights; // Array of light interactions
     }
 
     struct stem {
+        uint TRNid;
         uint stemId;
         uint leaveId;
         uint branchId;
-        uint[] leavesIds;
+        uint[] leaves;
 
     }
 
@@ -113,69 +119,202 @@ contract Elements {
         address[] adowhos; // List of ADOWHOs
     }
 
-    waves[] = wave;
-    leaves[] = leave;
-    stems[] = stem;
-    seeds[] = seed;
-    fruits[] = fruit;
-    branches[] = branch;
-    lights[] = light;
-     
+    adowhos[] = adowho;
+
+    TRNs[] = TRN;
     BRNs[] = BRN;
+    
+    lights[] = light; // The light tells us where to go
+    branches[] = branch; // This is how we reach our destination
+    fruits[] = fruit; // This is the heart of ADO
+    seeds[] = seed; // This is the generosity of ADO
+    leaves[] = leave; // This is where you make your mark
+    stems[] = stem; // This is where you make friends
+     
+    waves[] = wave; // This controls our flow
 
-    event fruit_created();
-    event fruit_eaten();
-    event seed_harvested();
-    event seed_planted();
-    event leave_grown()
+    uint fertilizer; // This is the current amount of TRNs per seed
 
-    function plant() {
+}
 
-        // MINT ADOWHO
+contract Signals is Elements {
 
-        // SEED ADOWHO with TRN
+    event adowho (
+        string "anew_plant: {soleId} TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp}"
+    );
 
-        // EMIT NEW ADOWHO Event
+    event spin (
+        string "anew_TRN: {TRNid}TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+    )
+
+    event harvest_fruit(
+        string "anew_fruit: {fruitId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+    );
+
+    event plant_seed(
+        string "anew_plant: {plantId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+    );
+
+    event sprout_fruit(
+        string "anew_fruit: {fruitId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+    );
+
+    event sprout_branch(
+        string "anew_brach: {branchId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+    );
+
+    event sprout_leave(
+        string "anew_leave: {leaveId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+    );
+
+    event sprout_stem(
+        string "anew_stem: {stemId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+    );
+
+    event make_wave(
+        string "anew_wave: {waveId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+    );
+
+}
+
+contract Powers is Elements, Signals {
+
+    function adowho_on(address _ADO, address _adoWho, hash _adoHash) onlyOwner returns (uint ) {
+
+        //Verify Signature
+        askADO(_ADO).verifySignature();
+
+        //Verify New Owner
+        if ( adowho.owner[_adowho] == _adowho ) {
+            return error("This address already owns an ADO Token.");
+        }
+
+        //Verify Hosh
+        if ( adowho.adoHash[_adoHash] == _adoHash ) {
+            return error("This hash has already been absorbed")
+        }
+
+        // MINT the ADO Token
+        askADO(_ADO).mint(_adowho, _adoHash);
+
+        // ADD ADOWHO to Memory
+        uint count = adowhos.length;
+        uint next = count ++;
+        adowho.push( next , _adowho );
+
+        // TRANSFER TRN TO NEW ADOWHO
+        askADO(_ADO_TRN).TRNOut(_adowho, fertalizer,); 
+
+        // ADD SEED TO MEMORY
+        uint count = seeds.length;
+        uint next = count ++;
+        seed.push( next , _adowho , fertalizer );
+
+        // EMIT Signals
     }
 
     function light() ownerOnly payable {
 
+        // SEE TRN
+        uint count = TRNS.length;
+        uint TRNid = count ++;
+
+        // SEE LIGHT
+        uint count = lights.length;
+        uint lightId = count ++;
+
+        // BREAK UP LIGHT
+        uint lightIn = _amount;
+        uint lightOut = light_in / 100 * 90;
+        uint lightLeft = light_in / 100 * 10;
+
         // SEND TRN to ADO
+        askADO(_ADO_TRN).TRNIntoADO(adowho, lightLeft, "light", lightId);
 
         // ADD Light to Fruit
+        uint soakedBranch = leaves.leaveId[_leaveId].branchId;
+        uint absorbFruit = branchs.branchId[soakedBranch].fruitId;
+        uint juice = fruits[absorbFruit].juice + lightLeft;
+        fruits[absorbFruit].juice = juice;
 
-        // ADD Light to leave 
+        // ADD Light to leave
+        uint soakedLeaf = leaves.leavesId[_leaveId];
+        soakedLeaf.lightIDs.push(lightID)
 
         // SEND TRN to leave owner
+        address luminary = soakedLeaf.adowho;
+        askADO().bask(adowho, lightOut, luminary);
+
+        // REMEMBER LIGHT
+        lights.push(lightId, TRNId, _adowho, _amount, _leaveId);
+        
+        //REMEMBER TRN
+        TRNS.push(next, _adowho, 'light', _lightId);
 
         // EMIT Light Event
     };
 
     function BRN() ownerOnly {
 
-        // SEND TRN to ADO
+        // SEE TRN
+        uint count = TRNS.length;
+        uint TRNId = count ++;
 
-        // SWAP TRN for BRN
+        // Start BRN
+        uint count = BRNS.length;
+        uint BRNId = count ++;
+
+        // SWAP TRN for BRN then transfer BRN to ADO
+        askADO(_ADO_BRN).BRNIn(_amount, adowho);
+
+        //REMEMBER TRN
+        TRNS.push(next, _adowho, 'light', _lightId);
 
         // EMIT BRN Event
     };
 
     function leave() {
 
-        // SEND TRN TO ADO
+         // SEE TRN
+        uint count = TRNS.length;
+        uint TRNId = count ++;
 
-        // CREATE new LEAVE
+        // SEE LEAVE
+        uint count = leaves[].length;
+        uint leaveId = count ++;
+
+        // SEND TRN to ADO
+        askADO(_ADO_TRN).TRNIntoADO( _amount, adowho, "leave", leaveId );
+
+        // CREATE LEAVE
+        askADO(_ADO_Leave).mint( _leave, _leaveHash, _adowho);
 
         // ADD LEAVE TO BRANCH
+        Branches[_branchId].leaves.push(leaveId);
+
+        //REMEMBER LEAVE
+        Leaves[].push(leaveId, TRNId, _leaveHash, _branchId, _adowho);
+
+        //REMEMBER TRN
+        TRNS.push(next, _adowho, 'light', _lightId);
 
         // EMIT LEAVE Event
+        emit sprout_leave(TRNId, leaveId);
+
     }
 
     function wash() {
 
+        //GET LATEST TRN
+        uint lastTRN = TRNS.length;
+        uint adowho = TRNS[lastTRN].adowho;
+
         // SWAP BRN TO TRN
+        askADO(_ADO_BRN).wash(_amount);
 
         // DISTRIBUTE TRN TO ADOWHOS
+        askADO(_ADO_TRN).TRNOut(_amount, adowho);
+
     }
 
     function eat() {
@@ -198,5 +337,9 @@ contract Elements {
     };
 
 
+
+}
+
+contract COMMANDS is Elements {
 
 }
