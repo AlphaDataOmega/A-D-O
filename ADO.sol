@@ -242,8 +242,9 @@ contract Powers is Elements, Signals {
         soakedLeaf.lightIDs.push(lightID)
 
         // SEND TRN to leave owner
+        address luminaries = askSentinals(_SENTINAL).vote(_leaveId);
         address luminary = soakedLeaf.adowho;
-        askADO().bask(adowho, lightOut, luminary);
+        askADO(_ADO).TRNin(adowho, lightOut, luminary);
 
         // REMEMBER LIGHT
         lights.push(lightId, TRNId, _adowho, _amount, _leaveId);
@@ -254,7 +255,7 @@ contract Powers is Elements, Signals {
         // EMIT Light Event
     };
 
-    function BRN() ownerOnly {
+    function BRN() external ownerOnly {
 
         // SEE TRN
         uint count = TRNS.length;
@@ -273,7 +274,7 @@ contract Powers is Elements, Signals {
         // EMIT BRN Event
     };
 
-    function leave() {
+    function sprout_leave() external ownerOnly {
 
          // SEE TRN
         uint count = TRNS.length;
@@ -303,7 +304,7 @@ contract Powers is Elements, Signals {
 
     }
 
-    function wash() {
+    function wash(uint _amount) {
 
         //GET LATEST TRN
         uint lastTRN = TRNS.length;
@@ -317,16 +318,20 @@ contract Powers is Elements, Signals {
 
     }
 
-    function eat() {
+    function eat(uint fruitId) internal ownerOnly {
         
         // GET FRUIT DATA
 
         // SEND TRN TO ADOWHOS
 
+
+
         // RESET FRUIT
 
         // EMIT SQUEEZE Event
     };
+
+    function sprout_branch();
 
     function sync(bool _with, address _adowho, string _waveName, uint _waveId ) {
 
@@ -341,5 +346,19 @@ contract Powers is Elements, Signals {
 }
 
 contract COMMANDS is Elements {
+
+    function viewLeave(uint _leaveId) external public returns (hash _leaveHash);
+
+    function getLastLeaveId(uint _branchId) external public returns (uint _leaveId);
+
+    function getLuminaries(uint _branchId) external public returns (address[] _adowhos);
+
+    function getLastBranch() external public returns (uint branchId);
+
+    function sendWave( uint waveId ) external public returns (uint waveId);
+
+}
+
+contract ADO_DO is ADO {
 
 }
