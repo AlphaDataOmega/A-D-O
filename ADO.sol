@@ -1,39 +1,3 @@
-ERC20
-ERC721
-ERC1155
-Governor
- Copy to Clipboard
- Open in Remix
- Download
-settings
-Name
-ADO_WHO
-Symbol
-ADO
-Base URI
-https://...
-features
-Mintable
-Auto Increment Ids
-Burnable
-Pausable
-Votes
-Enumerable
-URI Storage
-access control
-Ownable
-Roles
-upgradeability
-
-Transparent
-UUPS
-info
-Security Contact
-security@example.com
-License
-MIT
- Forum
- Docs
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
@@ -42,6 +6,7 @@ contract Elements {
     struct adowho {
         uint soleId;
         address owner;
+        uint adowhoTokenId;
     }
 
     // This is a record of a TRN in the ADO Universe
@@ -57,8 +22,8 @@ contract Elements {
         uint256 TRNid;
         uint lightId; // light counter
         address adowho; // ADOWHO that sent light
-        uint amount // amount of TRNs in light
-        uint leaveId // the ID of the recieving leave
+        uint amount; // amount of TRNs in light
+        uint leaveId; // the ID of the recieving leave
     }
 
     struct BRN {
@@ -72,12 +37,12 @@ contract Elements {
 
     struct branch {
         uint TRNid;
-        uint branchID // 
-        string branchName
-        hash branchHash
-        address adowho
+        uint branchID; // 
+        string branchName;
+        hash branchHash;
+        address adowho;
         uint fruitID;
-        uint[] leaves;
+        uint[] leaves; // ?? This should be mapped to handle a LeaveId and not just the count of leaves added.
     }
 
     struct leave {
@@ -119,7 +84,7 @@ contract Elements {
         address[] adowhos; // List of ADOWHOs
     }
 
-    adowhos[] = adowho;
+    string[] adowhos;
 
     TRNs[] = TRN;
     BRNs[] = BRN;
@@ -139,40 +104,69 @@ contract Elements {
 
 contract Signals is Elements {
 
-    event adowho (
-        string "anew_plant: {soleId} TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp}"
+    event adowho(
+        string "adowho_on"
+        address adowho, 
+        uint TRNId, 
+        uint blockNumber, 
+        uint timestamp
     );
 
-    event spin (
-        string "anew_TRN: {TRNid}TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
-    )
-
     event harvest_fruit(
-        string "anew_fruit: {fruitId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+        string "fruit_harvest",
+        uint fruitId,
+        uint amount,
+        uint seeds,
+        uint blockNumber,
+        uint timestamp,
     );
 
     event plant_seed(
-        string "anew_plant: {plantId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+        string "anew_plant",
+        uint plantId, 
+        uint TRNId, 
+        uint blockNumber, 
+        uint timestamp
     );
 
     event sprout_fruit(
-        string "anew_fruit: {fruitId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+        string "anew_fruit",
+        uint fruitId, 
+        uint TRNId, 
+        uint blockNumber, 
+        uint timestamp
     );
 
     event sprout_branch(
-        string "anew_brach: {branchId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+        string "anew_brach",
+        uint branchId, 
+        uint TRNId, 
+        uint blockNumber, 
+        uint timestamp
     );
 
     event sprout_leave(
-        string "anew_leave: {leaveId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+        string "anew_leave",        
+        uint leaveId, 
+        uint TRNId, 
+        uint blockNumber, 
+        uint timestamp
     );
 
     event sprout_stem(
-        string "anew_stem: {stemId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+        string "anew_stem",
+        uint stemId, 
+        uint TRNId, 
+        uint blockNumber, 
+        uint timestamp
     );
 
     event make_wave(
-        string "anew_wave: {waveId}, TRNId: {TRNId}, block_number: {blockNumber}, timestamp {unixTimestamp} "
+        string "anew_wave",
+        uint waveId, 
+        uint TRNId, 
+        uint blockNumber, 
+        uint timestamp
     );
 
 }
@@ -191,7 +185,7 @@ contract Powers is Elements, Signals {
 
         //Verify Hosh
         if ( adowho.adoHash[_adoHash] == _adoHash ) {
-            return error("This hash has already been absorbed")
+            return error("This hash has already been recorded")
         }
 
         // MINT the ADO Token
@@ -347,9 +341,19 @@ contract Powers is Elements, Signals {
 
 contract COMMANDS is Elements {
 
-    function viewLeave(uint _leaveId) external public returns (hash _leaveHash);
+    function getLeaveIdFromBranchByOrder(uint _branchId, uint _order) external public view returns (uint leaveId ) {
+        branch = Branches[_branchId];
+        leaveId = branch.leaves[_order];
+    };
+    
+    function viewTotalBranchLeaves(uint _branchId) external public view returns (uint totalLeaves) {
+        branch = Branches[_branchId]
+        totalLeaves = branch.leaves[].length;
+    };
 
-    function getLastLeaveId(uint _branchId) external public returns (uint _leaveId);
+    function viewLeave(uint _leaveId) external public view returns (hash leaveHash) {
+        leaveHash = leaves[_leaveId].leaveHash;
+    };
 
     function getLuminaries(uint _branchId) external public returns (address[] _adowhos);
 
