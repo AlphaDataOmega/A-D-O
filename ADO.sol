@@ -3,50 +3,46 @@ pragma solidity ^0.8.4;
 
 contract Elements {
 
+    // An ADOWHO is an Record to define You.
     struct adowho {
-        uint soleId;
-        address owner;
-        uint adowhoTokenId;
+        uint soleId; // This an incremental value that holds the order of ADOWHOs.
+        address adowho; // This is the address of the account that owns the ADO Token.
+        uint adowhoTokenId; // This holds the ADO Token ID it can be compared to the soleID.
     }
 
-    // This is a record of a TRN in the ADO Universe
+    // This is a recording of a TRN spent in the ADO Universe
     struct TRN { 
-        uint TRNid;
-        address soleId;
-        string action; 
-        uint[] inTRNId;       
+        uint TRNid; // This is an incremental value that holds the order of TRNs spent.
+        address adowho; // This is the address of the ADOWHO that used the TRN.
+        string action;  // This identifies the type of action for the TRN.
+        uint inTRNId; // This is the ID of the action.
     }
 
-    // 
+    // Light is tracked when an ADOWHO appreciates a leave.
     struct light {
-        uint256 TRNid;
-        uint lightId; // light counter
+        uint256 TRNid; // The ID of the TRN recorded.
+        uint lightId; // incremental value that holds the ID of the light action.
         address adowho; // ADOWHO that sent light
-        uint amount; // amount of TRNs in light
         uint leaveId; // the ID of the recieving leave
     }
 
     struct BRN {
-        uint TRNid;
-        uint BRNId;
-        address adowho; // This is the adowho who BRN-ed a leave
+        uint TRNid; // The ID of the TRN used to BRN
+        uint BRNId; // An incremental value to ID the BRN
         uint leaveId; // This is leave ID that was BRN-ed
-        uint TokenId; // This is the TokenID BRN Token
-        bool exists; // This will kill the BRN Token
     }
 
     struct branch {
-        uint TRNid;
-        uint branchID; // 
-        string branchName;
-        hash branchHash;
-        address adowho;
-        uint fruitID;
-        uint[] leaves; // ?? This should be mapped to handle a LeaveId and not just the count of leaves added.
+        uint TRNid; // The ID of the TRN used to create the Branch.
+        uint branchID; // An incremental value to ID the Branch.
+        string branchName; // The unique name of the Branch.
+        address adowho; // This is the address of who created of the Branch.
+        uint fruitID; // The ID of the fruit sprouted by the Branch.
+        uint[] leaves; // This should be mapped to handle a LeaveId and not just the count of leaves added.
     }
 
     struct leave {
-        uint TRNid;
+        uint TRNid; // The ID of the TRN used to create the leave.
         uint leave_id; // This is the counter 
         hash leaveHash; // This is json data file hash id
         string branchID; // This is the ID of the orgin branch
@@ -232,7 +228,7 @@ contract Powers is Elements, Signals {
         fruits[absorbFruit].juice = juice;
 
         // ADD Light to leave
-        uint soakedLeaf = leaves.leavesId[_leaveId];
+        soakedLeaf = leaves.leavesId[_leaveId];
         soakedLeaf.lightIDs.push(lightID)
 
         // SEND TRN to leave owner
@@ -355,7 +351,9 @@ contract COMMANDS is Elements {
         leaveHash = leaves[_leaveId].leaveHash;
     };
 
-    function getLuminaries(uint _branchId) external public returns (address[] _adowhos);
+    function getLuminaries(uint _branchId) external public returns (address[] _adowhos) {
+
+    };
 
     function getLastBranch() external public returns (uint branchId);
 
