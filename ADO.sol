@@ -3,17 +3,20 @@ pragma solidity ^0.8.4;
 
 contract Elements {
 
+bool upgraded;
+
     // An ADOWHO is an Record to define You.
     struct adowho {
         uint soleId; // This an incremental value that holds the order of ADOWHOs.
-        address adowho; // This is the address of the account that owns the ADO Token.
+        address eTRNId; // This is the address of the account that owns the ADO Token.
         uint adowhoTokenId; // This holds the ADO Token ID it can be compared to the soleID.
     }
 
     // This is a recording of a TRN spent in the ADO Universe
     struct TRN { 
         uint TRNid; // This is an incremental value that holds the order of TRNs spent.
-        address adowho; // This is the address of the ADOWHO that used the TRN.
+        uint soleId; // The identifier of the ADOWHO
+        address eTRNId; // This is the address of the ADOWHO that used the TRN.
         string action;  // This identifies the type of action for the TRN.
         uint inTRNId; // This is the ID of the action.
     }
@@ -79,20 +82,31 @@ contract Elements {
         address adowho; // wave Owner
         address[] adowhos; // List of ADOWHOs
     }
+    
+    struct drop {
+        uint dropID; // drop counter.
+        hash dropHash; // A holder for an ipfs hash.
+        uint eTRNId; // The ID of the ADOWHO which created the drop.
+        uint[] branches; // An array to hold multiple branches.
+        uint wave; // An identifier of the wave to send the drop.
+        bool river; // Trigger for sending to the river of the ADOWHO.
+    }
 
     string[] adowhos;
 
-    TRNs[] = TRN;
-    BRNs[] = BRN;
+    TRNs[] = TRN; // The currency of life in the ADO Universe
+    BRNs[] = BRN; // The punishment for nonsense
     
+    drops[] = drop; // Drops are initiated by us.
     lights[] = light; // The light tells us where to go
     branches[] = branch; // This is how we reach our destination
     fruits[] = fruit; // This is the heart of ADO
     seeds[] = seed; // This is the generosity of ADO
     leaves[] = leave; // This is where you make your mark
-    stems[] = stem; // This is where you make friends
+    stems[] = stem; // This is where you make conversations
      
-    waves[] = wave; // This controls our flow
+    waves[] = wave; // This moves us together.
+    rivers[] = river; // This flows from us.
 
     uint fertilizer; // This is the current amount of TRNs per seed
 
