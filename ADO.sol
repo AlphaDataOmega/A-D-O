@@ -9,7 +9,6 @@ bool upgraded;
     struct adowho {
         uint soleId; // This an incremental value that holds the order of ADOWHOs.
         address eTRNId; // This is the address of the account that owns the ADO Token.
-        uint adowhoTokenId; // This holds the ADO Token ID it can be compared to the soleID.
     }
 
     // This is a recording of a TRN spent in the ADO Universe
@@ -45,7 +44,6 @@ bool upgraded;
     }
 
     struct leave {
-        uint TRNid; // The ID of the TRN used to create the leave.
         uint leave_id; // This is the counter 
         hash leaveHash; // This is json data file hash id
         string branchID; // This is the ID of the orgin branch
@@ -54,33 +52,22 @@ bool upgraded;
     }
 
     struct stem {
-        uint TRNid;
-        uint stemId;
-        uint leaveId;
-        uint branchId;
-        uint[] leaves;
-
+        uint stemId; // The ID of the stem
+        uint eTRNId; // The ID of the ADOWHO which created the stem.
+        uint leaveId; // The ID of the leave which owns the stem.
+        uint[] leaves; // The Leave IDs connected to the stem
     }
 
     struct fruit {
-        uint fruitID;
-        uint branchID;
-        hash fruitHash; 
-        uint totalSupply; //This keeps track of how big the fruit is.
-        address[] adowhos; // This keeps a list of leave owners.
+        uint fruitID; // Fruit counter as ID
+        uint branchID; // The branch that created the fruit
+        uint juice; // The amount of TRNs accumulated by the Fruit.
     }
 
     struct seed {
-        uint seedId;
-        address adowho;
-        uint amount;
-    }
-
-    struct wave {
-        uint waveID; // wave counter
-        hash waveHash; // Hash ID of 
-        address adowho; // wave Owner
-        address[] adowhos; // List of ADOWHOs
+        uint seedId; // The id of the seed produced
+        uint eTRNId; // The reciever of the seed
+        uint amount; // The amount of TRNs in the seed
     }
     
     struct drop {
@@ -89,7 +76,18 @@ bool upgraded;
         uint eTRNId; // The ID of the ADOWHO which created the drop.
         uint[] branches; // An array to hold multiple branches.
         uint wave; // An identifier of the wave to send the drop.
-        bool river; // Trigger for sending to the river of the ADOWHO.
+        bool river; // Trigger for sending to the ADOWHO river.
+    }
+
+    struct wave {
+        uint waveID; // wave counter.
+        uint eTRNId; // creator of the wave.
+        uint[] branches; // List of branches in the wave.
+    }
+    
+    struct river {
+        uint eTRNId; // This is the owner of the river;
+        uint[] eTRNIds; // These are the ADOWHOs in the river;
     }
 
     string[] adowhos;
@@ -109,8 +107,8 @@ bool upgraded;
     rivers[] = river; // This flows from us.
 
     uint fertilizer; // This is the current amount of TRNs per seed
-
-}
+    
+    
 
 contract Signals is Elements {
 
@@ -182,6 +180,59 @@ contract Signals is Elements {
 }
 
 contract Powers is Elements, Signals {
+
+    drop( string _dropHash, address _eTRNId, string _type, uint[] _ids, uint _TRNs ) external ownerOnly returns (uint dropID) {
+
+            // Get the dropID
+            count = drops[].length;
+            next = count ++;
+            uint dropID = next;
+
+            // Verify the adowho
+            if ( _eTRNId = adowho.eTRNId[_eTRNId] ) {
+                return error("The eTRNId does not exist.");
+            }
+
+            // Verify Ownership of eTRNId
+            if ( _eTRNId = msg.sender ) {
+                return error( "Sender does not own the eTRNId" );
+            }       
+           
+            // SEND TRN to ADO
+            bool TRNin = askADO(_ADO_TRN).TRNIntoADO( _TRNs, adowho, "leave", leaveId );
+            
+            // Type is Wave
+            if ( _type == "wave" ) {
+                waveId = _ids[0];
+                branches = waves[waveId].branches
+                for each ( branches.branchIds as branchId ) {
+                    sprout_leave(branchId, dropHash);
+                }
+            }
+            
+            // Type is Leave
+            if ( _type == "leave" ) {
+                branchId = _ids[0];
+                sprout_leave(branchId, dropHash);
+            }
+           
+            // Type is River
+            if ( _type == "river" ) {
+                riverId = _ids[0];
+                
+            }
+            
+            hash dropHash; // A holder for an ipfs hash.
+            uint eTRNId; // The ID of the ADOWHO which created the drop.
+            uint[] branches; // An array to hold multiple branches.
+            uint wave; // An identifier of the wave to send the drop.
+            bool river; // Trigger for sending to the ADOWHO river.
+            
+            // Save Drop
+            
+            
+
+    }
 
     function adowho_on(address _ADO, address _adoWho, hash _adoHash) onlyOwner returns (uint ) {
 
@@ -280,16 +331,10 @@ contract Powers is Elements, Signals {
 
     function sprout_leave() external ownerOnly {
 
-         // SEE TRN
-        uint count = TRNS.length;
-        uint TRNId = count ++;
-
-        // SEE LEAVE
+        // GET LEAVE ID
         uint count = leaves[].length;
         uint leaveId = count ++;
 
-        // SEND TRN to ADO
-        askADO(_ADO_TRN).TRNIntoADO( _amount, adowho, "leave", leaveId );
 
         // CREATE LEAVE
         askADO(_ADO_Leave).mint( _leave, _leaveHash, _adowho);
