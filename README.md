@@ -1,81 +1,114 @@
-# A-D-O
-Welcome to the ADO Universe,
+# A-D-O (auh-dee-oh)
 
-An ADO_WHO is the I_AM role on a smart-contract. 
+Welcome to the ADO Universe.
 
-An ADO_WHO has a _bowl where they can collect there _appreciations.
+An ADOWHO is the sole owner of an ADO NFT Token.
 
-All DAO Voting will be performed by 12 sentinal accounts.
+An ADOWHO has a wallet where they can collect TRNs.
 
-ADO_WHOs can set 1 beneficiary if the other ADO_WHO agrees.
+TRNs are what make the ADO Universe go 'round.
 
-An ADO_WHO comes with an eTRN_id which is the address of their _S_bowl.
+TRNs are used to make drops.
 
-All ADO_WHOs are verified by the ADO smart-contract.
+Drops contain the data sent to the ADO Tree.
 
-New ADO_WHOs are planted() _seed in TRN to thier _s_bowl. 
+Drops are used to create leaves on the branches of the ADO Tree.
 
-ADO_WHOs can use TRN to liftUp() a _drop to the ADO_CLOUD to be 
-dripped() on a mapping of _branches.
+Leaves are short form social content stored within adoTree.earth.
 
-ADO_WHOs can use TRNs to sprout() a _branch and ADO will grow() a _fruit.
+Branches are the directory locations of leaves. 
 
-ADO_WHOs can use TRNs to _leave a _drop on a _branch. 
+Leaves can have directories of their own called stems. 
 
-TRNs from a _leave goes to the _fruit.
+As ADOWHOs travers the ADO Universe they must contribute. 
 
-ADO picks() _fruit and plants() _seed to ADO_WHOs in TRN
+ADOWHOs must occasionally consider, or shed light upon leaves.
 
-_leaves are in the name.json file.
+When prompted to shed light, ADOWHOs can appreciate or burn a leave.
 
-each name.json file is based on real_i_d.
+In order to shed light or burn a leave it will cost TRNs.
 
-real_i_d must have a sole_owner: and a spirit: to interpret the body:
+Appreciated leaves send TRNs to their owner. 
 
-The sole_owner: is the eTRN_id of the ADO_WHO
+Burned leaves cause ADO to swap a TRN for a BRN Token.
 
-spirit: contains rules for interpreting the body:
+Leaves can be burned off a branch.
 
-the body: is the data.
+Each Branch has a Fruit. 
 
-These files are _petals on the lotus network.
+Fruits grow from the light gained by the leaves on thier branch.
 
-ADO_WHOs can host a _bot or _b that b_lives on a _lotus.
+Fruits produce seeds and neckTRN when harvested.
 
-faster _bs get more pull_in() of petals for their _hive
+Seeds are distributed to new ADOWHOs. 
 
-ADO picks() _flowers and provides _fruit in TRN to _b owners.
+NeckTRN is distributed to the brightest leaves on a branch.
 
-If someone is caught kills a _b and views _petals
-on a _lotus flower the ADO_WHO must pay all thier TRNs_in(). 
+The ADO Contract can wash BRNs away from an ADOWHO.
 
-ADO_WHOs can use a _lens to interact with a _leave. 
+ADOWHOs are washed by swapping BRN Tokens for TRN.
 
-A _lens is an interface or _i that exists with a drop.
+# ADO Token
 
-For now, the only _i is a wave.
+The ADO Token is a Non-Fungible Token that can only be owned by a single address. 
 
-All _leaves on a _branch gain light(TRNs) or get BRNed();
+# ADOWHO
 
-ADO_WHOs must shed light() in TRNs or BRN a _leave through
-an _i or interface. 
+An address that owns an ADO Token is referred to in the ADO Universe as an ADOWHO
 
-When someone uses a TRN to BRN a _leave then the TRN is 
-swapped for BRNs and transferred to the ADO contract.
+# TRNs
 
-ADO can flush() the BRNs for TRNs in order to provide
-new _seed.
+TRN Tokens are the crypto currency that allows the ADO Universe to grow. 
 
-ADO_WHOs can _leave a _drop on a _tree of _branches.
+# OurTRN.earth
 
-ADO_WHOs can use their TRN to _flow a _drops.
+ADOTree.earth is an IPFS gateway that stores ADO content to a hash address. 
 
-ADD_WHOs can sync() with a _river from another.
+# _/Branches
 
-ADO_WHOs can ask_LOUD() to send a _drop to a
-_river. 
+Branches are the directories in which content can be retireved. 
 
-ADO will pay TRNs for ask_LOUD() requests. 
+# _/Leaves
+
+Leaves are the contents stored on a branch.
+
+# _/Stems
+
+Stems are sub-directories for leaves.
+
+# _/Light
+
+Sheding Light is when an ADOWHO considers the content of a leave.
+
+TRNs used to shed light will go to the leave owner and the ADO Fruit.
+
+# BRNs
+
+TRN Tokens are swapped into BRN Tokens when a leave considered negative.
+
+# Burned Leaves
+
+A Leave is removed when it has earned more BRN Tokens than TRN Tokens. 
+
+# _/Fruit
+
+A fruit is a balance pertaining to TRNs gained from leaves within a branch.
+
+# _/Seed
+
+The SEED is a dynamic amount of TRNs distributed to new ADOWHOs.
+
+# _/neckTRN
+
+NeckTRN is the amount of TRNs that a fruit provides to the top leaves on it's branch.
+
+# _/Wash
+
+The wash is a dynamic amount which ADO will swap BRN Tokens into TRNs, for a single ADOWHO. 
+
+# Washed ADOWHO
+
+An washed ADOWHO is the owner of the most recent leave on the ADO Tree when wash() is called.
 
 
 
