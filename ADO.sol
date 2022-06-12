@@ -7,6 +7,7 @@ bool upgraded;
 
     // An ADOWHO is an Record to define You.
     struct adowho {
+<<<<<<< Updated upstream
         uint soleId; // This an incremental value that holds the order of ADOWHOs.
         address eTRNId; // This is the address of the account that owns the ADO Token.
     }
@@ -18,6 +19,19 @@ bool upgraded;
         address eTRNId; // This is the address of the ADOWHO that used the TRN.
         string action;  // This identifies the type of action for the TRN.
         uint inTRNId; // This is the ID of the action.
+=======
+        address adowho; // This is the address of the account that owns the ADO Token.
+        string callName; // This is the call name of the ADOWHO
+        string ADOHash; // This holds the ADO Token hash
+        string soleHash; // Upgraded by ADO and the ADOWHO.
+    }
+
+    // TRNs are Recordings of trans actions withing the ADO Universe.
+    struct TRN {
+        uint TRNId; // A counter for TRNs used for ID;
+        address adowho; // The address of the ADOWHO giving TRNs;
+        uint amount; // This holds the amount of TRNs given.
+>>>>>>> Stashed changes
     }
 
     // Light is tracked when an ADOWHO appreciates a leave.
@@ -28,14 +42,15 @@ bool upgraded;
         uint leaveId; // the ID of the recieving leave
     }
 
+    // BRN is a useless Token. ADO recieves all BRNs
     struct BRN {
-        uint TRNid; // The ID of the TRN used to BRN
+        uint dropId; // The ID of the drop used to BRN
         uint BRNId; // An incremental value to ID the BRN
         uint leaveId; // This is leave ID that was BRN-ed
     }
-
+    
     struct branch {
-        uint TRNid; // The ID of the TRN used to create the Branch.
+        uint dropId; // The ID of the TRN used to create the Branch.
         uint branchID; // An incremental value to ID the Branch.
         string branchName; // The unique name of the Branch.
         address adowho; // This is the address of who created of the Branch.
@@ -44,14 +59,21 @@ bool upgraded;
     }
 
     struct leave {
+<<<<<<< Updated upstream
         uint leave_id; // This is the counter 
+=======
+        uint dropId; // The ID of the drop used to create the leave.
+        uint leaveId; // This is the counter 
+>>>>>>> Stashed changes
         hash leaveHash; // This is json data file hash id
-        string branchID; // This is the ID of the orgin branch
-        address adowho; // This is the creator of the branch
+        uint branchId; // This is the ID of the orgin branch
+        uint stemId; // This holds the stemId the leave is attached to.
+        address adowho; // This is the creator of the leave
         uint[] lights; // Array of light interactions
     }
 
     struct stem {
+<<<<<<< Updated upstream
         uint stemId; // The ID of the stem
         uint eTRNId; // The ID of the ADOWHO which created the stem.
         uint leaveId; // The ID of the leave which owns the stem.
@@ -88,14 +110,71 @@ bool upgraded;
     struct river {
         uint eTRNId; // This is the owner of the river;
         uint[] eTRNIds; // These are the ADOWHOs in the river;
+=======
+        uint dropId; // The ID of the drop used to create the stem.
+        uint stemId; // Incremental Counter as ID for stems.
+        uint leaveId; // The leaveId that the stem is attached to.
+        uint branchId; // The branchId of the parent leave.
+        uint[] leaves; // Leaves that are attached to the stem.
+    }
+
+    struct fruit {
+        uint fruitID; // The counter of the Fruits
+        uint branchID; // The ID of the branch that sprouted the fruit.
+        uint juice; //This keeps track of how big the fruit is.
+        address[] adowhos; // This keeps a list of leave owners.
+    }
+
+    struct seed {
+        uint seedId; // A counter and ID of the seed created.
+        address adowho; // The reciever of the seed.
+        uint amount; // The amount of TRNs within the seed.
+    }
+
+    struct wave {
+        uint waveID; // wave counter
+        address adowho; // wave Owner
+        address[] adowhos; // List of ADOWHOs
+>>>>>>> Stashed changes
+    }
+
+    struct river {
+        uint riverId; // The ID of the river.
+        uint adowho; // To whom this river belongs.
+        uint[] adowhos; // List of ADOWHOs who are in the river
+    }
+    
+    struct drop {
+        uint dropId; // drop counter.
+        hash dropHash; // A holder for an ipfs hash.
+        uint TRNId; // The ID of the ADOWHO which created the drop.
+        uint flowId; // An identifier of the flow to send the drop.
+        uint waveId; // An identifier of the wave to send the drop.
+        bool river; // Trigger for sending to the river of the ADOWHO.
+    }
+
+    struct flow {
+        uint flowId; // A Flow between ADOWHOs
+        address[] adowhos; // Holds WHOWHOs in the Flow.
+
+        // FOR SECRET FLOWS
+        bool hide; // Trigger to turn off Signal
+        string sin; // Secret Identification Number
     }
 
     string[] adowhos;
 
+<<<<<<< Updated upstream
     TRNs[] = TRN; // The currency of life in the ADO Universe
     BRNs[] = BRN; // The punishment for nonsense
     
     drops[] = drop; // Drops are initiated by us.
+=======
+    TRNs[] = TRN; // Trans act ions in the ADO Universe
+    BRNs[] = BRN; // The punishment for un-enlightened leaves
+    
+    drops[] = drop; // Drops are sent to the ADO Cloud.
+>>>>>>> Stashed changes
     lights[] = light; // The light tells us where to go
     branches[] = branch; // This is how we reach our destination
     fruits[] = fruit; // This is the heart of ADO
@@ -105,6 +184,10 @@ bool upgraded;
      
     waves[] = wave; // This moves us together.
     rivers[] = river; // This flows from us.
+<<<<<<< Updated upstream
+=======
+    news[] = news; // New leaves for adowhos.
+>>>>>>> Stashed changes
 
     uint fertilizer; // This is the current amount of TRNs per seed
     
@@ -112,7 +195,7 @@ bool upgraded;
 
 contract Signals is Elements {
 
-    event adowho(
+    event anew_adowho(
         string "adowho_on"
         address adowho, 
         uint TRNId, 
@@ -120,7 +203,7 @@ contract Signals is Elements {
         uint timestamp
     );
 
-    event harvest_fruit(
+    event anew_harvest(
         string "fruit_harvest",
         uint fruitId,
         uint amount,
@@ -129,9 +212,9 @@ contract Signals is Elements {
         uint timestamp,
     );
 
-    event plant_seed(
-        string "anew_plant",
-        uint plantId, 
+    event anew_seed(
+        string "anew_seed",
+        uint pseedId, 
         uint TRNId, 
         uint blockNumber, 
         uint timestamp
@@ -177,9 +260,49 @@ contract Signals is Elements {
         uint timestamp
     );
 
+    event send_flow(
+
+    );
+
 }
 
-contract Powers is Elements, Signals {
+contract ADO_EVO is Elements {
+
+    function drop( address[] _adowho ) {
+        
+        // GET NEXT DROP ID
+        next = drops.length++;
+
+        // TYPE IS BRANCH
+        if ( _type == "Branch" ) {
+
+        }
+
+        // TYPE IS LEAVE
+        if ( _type == "Leave" ) {
+
+        }
+
+        // TYPE IS WAVE
+        if ( _type == "Wave" ) {
+
+        }
+
+        // TYPE IS RIVER
+        if ( _type == "River" ) {
+
+        }
+
+        // TYPE IS FLOW
+        if ( _type == "Flow" ) {
+
+        }
+
+    }
+
+}
+
+contract ADO_grow is Elements, Signals {
 
     drop( string _dropHash, address _eTRNId, string _type, uint[] _ids, uint _TRNs ) external ownerOnly returns (uint dropID) {
 
@@ -266,7 +389,7 @@ contract Powers is Elements, Signals {
         seed.push( next , _adowho , fertalizer );
 
         // EMIT Signals
-    }
+    };
 
     function light() ownerOnly payable {
 
@@ -351,36 +474,15 @@ contract Powers is Elements, Signals {
         // EMIT LEAVE Event
         emit sprout_leave(TRNId, leaveId);
 
-    }
-
-    function wash(uint _amount) {
-
-        //GET LATEST TRN
-        uint lastTRN = TRNS.length;
-        uint adowho = TRNS[lastTRN].adowho;
-
-        // SWAP BRN TO TRN
-        askADO(_ADO_BRN).wash(_amount);
-
-        // DISTRIBUTE TRN TO ADOWHOS
-        askADO(_ADO_TRN).TRNOut(_amount, adowho);
-
-    }
-
-    function eat(uint fruitId) internal ownerOnly {
-        
-        // GET FRUIT DATA
-
-        // SEND TRN TO ADOWHOS
-
-
-
-        // RESET FRUIT
-
-        // EMIT SQUEEZE Event
     };
 
-    function sprout_branch();
+    function sprout_branch () {
+
+    };
+
+    function sprout_stem () {
+
+    };
 
     function sync(bool _with, address _adowho, string _waveName, uint _waveId ) {
 
@@ -408,9 +510,13 @@ contract COMMANDS is Elements {
 
     function viewLeave(uint _leaveId) external public view returns (hash leaveHash) {
         leaveHash = leaves[_leaveId].leaveHash;
-    };
 
-    function getLuminaries(uint _branchId) external public returns (address[] _adowhos) {
+        //////////////
+        adowho vew counter;
+        
+        ///////////////////////////
+        if adowho has viewed 100 leaves;
+            request consideration per last leave viewed;
 
     };
 
@@ -418,8 +524,48 @@ contract COMMANDS is Elements {
 
     function sendWave( uint waveId ) external public returns (uint waveId);
 
+    function getNews( address _adowho  ) {
+
+    }
 }
 
 contract ADO_DO is ADO {
 
+<<<<<<< Updated upstream
 }
+=======
+
+function washBRN(uint _amount) {
+
+        //GET LATEST TRN
+        uint lastTRN = TRNS.length;
+        uint adowho = TRNS[lastTRN].adowho;
+
+        // SWAP BRN TO TRN
+        askADO(_ADO_BRN).wash(_amount);
+
+        // DISTRIBUTE TRN TO ADOWHOS
+        askADO(_ADO_TRN).TRNOut(_amount, adowho);
+
+    }
+
+    
+
+    
+
+    function harvest(uint fruitId) internal ownerOnly {
+        
+        // GET FRUIT DATA
+
+        // SEND TRN TO ADOWHOS
+
+
+
+        // RESET FRUIT
+
+        // EMIT SQUEEZE Event
+    };
+
+
+}
+>>>>>>> Stashed changes
